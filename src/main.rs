@@ -1,9 +1,31 @@
 use std::fs;
 use std::fs::{ReadDir, DirEntry};
 use std::path::Path;
+use structopt::StructOpt;
+use hag::md_helper;
+
+#[derive(Debug, StructOpt)]
+struct Cli {
+    #[structopt(
+    short = "d",
+    help = "Target dir to search for articles"
+    )]
+//    target_dir: Option<String>,
+    target_dir: String,
+}
 
 fn main() {
 
+    // read args
+    let args = Cli::from_args();
+    let target_dir = args.target_dir;
+    println!("Hello, world! in dir {:?}", &target_dir);
+
+    // TODO temp test md_helper
+    let md_url = md_helper::make_markdown_url("test_text", &target_dir);
+    println!("Hugo link: {:?}", &md_url);
+
+    // build target path
     let base_path = Path::new(".")
         .join("..")
         .join("..")
@@ -46,6 +68,9 @@ fn walk_dir(dir: &DirEntry, iteration: usize) {
         }
     } else {
         if dir.file_name().to_str().unwrap() == "index.md" {
+            // TODO read index.md file
+            // citeste sectiunea si subsectiunea cautata -> get linii
+            // update lista de linii de returnat
             println!("{}- {}", " ".repeat(iteration*2), dir.file_name().to_str().unwrap());
         } else {
             println!("{}- {}", " ".repeat(iteration*2), "other file, don't care");
@@ -56,4 +81,17 @@ fn walk_dir(dir: &DirEntry, iteration: usize) {
 fn file_name_is_numeric(filename: &DirEntry) -> bool {
 //    filename.file_name().to_str().unwrap().parse::<u32>().is_ok()
     filename.file_name().to_str().unwrap().chars().all(char::is_numeric)
+}
+
+fn citeste_fisier() -> () {
+    unimplemented!()
+}
+
+fn scrie_fisier() -> () {
+    unimplemented!()
+}
+
+fn genereaza_cuprins() -> () {
+    // TODO nice to have
+    unimplemented!()
 }
